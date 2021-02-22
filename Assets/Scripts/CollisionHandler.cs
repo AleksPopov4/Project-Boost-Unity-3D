@@ -10,16 +10,25 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] AudioClip crashAudioClip;
     [SerializeField] AudioClip landAudioClip;
 
+    [SerializeField] ParticleSystem crashParticle;
+    [SerializeField] ParticleSystem successParticle;
+
     bool isTransitioning = false;
+    bool collisionDisabled = false;
 
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Update()
+    {
+        DisableOrEnableCollisions();
+    }
+
     private void OnCollisionEnter(Collision other)
     {
-        if (isTransitioning)
+        if (isTransitioning || collisionDisabled)
         {
             return;
         }
@@ -44,6 +53,7 @@ public class CollisionHandler : MonoBehaviour
         isTransitioning = true;
         audioSource.Stop();
         audioSource.PlayOneShot(crashAudioClip, 0.2f);
+        crashParticle.Play();
         GetComponent<Movement>().enabled = false;
         Invoke("ReloadScene", delayTime);
     }
@@ -53,6 +63,7 @@ public class CollisionHandler : MonoBehaviour
         isTransitioning = true;
         audioSource.Stop();
         audioSource.PlayOneShot(landAudioClip, 0.2f);
+        successParticle.Play();
         GetComponent<Movement>().enabled = false;
         Invoke("LoadNextScene", delayTime);
     }
@@ -73,5 +84,13 @@ public class CollisionHandler : MonoBehaviour
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
+    }
+
+    void DisableOrEnableCollisions()
+    {
+        if (Input.GetKey(KeyCode.C))
+        {
+            collisionDisabled = !collisionDisabled;
+        }
     }
 }

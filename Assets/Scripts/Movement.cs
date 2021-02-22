@@ -10,6 +10,11 @@ namespace Assets.Scripts
         [SerializeField] float mainThrust = 1000f;
         [SerializeField] float rotationThrust = 150f;
         [SerializeField] AudioClip engineSoundClip;
+        [SerializeField] ParticleSystem mainBoosterParticle;
+        [SerializeField] ParticleSystem leftBoosterParticle;
+        [SerializeField] ParticleSystem rightBoosterParticle;
+
+
 
         // Start is called before the first frame update
         void Start()
@@ -29,28 +34,72 @@ namespace Assets.Scripts
         {
             if (Input.GetKey(KeyCode.Space))
             {
-                rb.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
-                if (!audioSource.isPlaying)
-                {
-                  audioSource.PlayOneShot(engineSoundClip, 0.5f);
-                }
+                StartThrusting();
             }
             else
             {
-                audioSource.Stop();
+                StopThrusting();
             }
+        }
+
+        private void StartThrusting()
+        {
+            rb.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
+            if (!audioSource.isPlaying)
+            {
+                audioSource.PlayOneShot(engineSoundClip, 0.5f);
+            }
+
+            if (!mainBoosterParticle.isPlaying)
+            {
+                mainBoosterParticle.Play();
+            }
+        }
+
+        private void StopThrusting()
+        {
+            mainBoosterParticle.Stop();
+            audioSource.Stop();
         }
 
         void ProcessRotation()
         {
             if (Input.GetKey(KeyCode.A))
             {
-                ApplyRotation(rotationThrust);
+                ApplyLeftRotation();
             }
             else if (Input.GetKey(KeyCode.D))
             {
-                ApplyRotation(-rotationThrust);
+                ApplyRightRotation();
             }
+            else
+            {
+                StopRotationParticleEffects();
+            }
+        }
+
+        private void ApplyLeftRotation()
+        {
+            ApplyRotation(rotationThrust);
+            if (!rightBoosterParticle.isPlaying)
+            {
+                rightBoosterParticle.Play();
+            }
+        }
+
+        private void ApplyRightRotation()
+        {
+            ApplyRotation(-rotationThrust);
+            if (!leftBoosterParticle.isPlaying)
+            {
+                leftBoosterParticle.Play();
+            }
+        }
+
+        private void StopRotationParticleEffects()
+        {
+            leftBoosterParticle.Stop();
+            rightBoosterParticle.Stop();
         }
 
         private void ApplyRotation(float rotationThisFrame)
