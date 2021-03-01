@@ -6,7 +6,7 @@ public class CollisionHandler : MonoBehaviour
 {
     AudioSource audioSource;
 
-    [SerializeField] private float delayTime = 1f;
+    [SerializeField] float delayTime = 1f;
     [SerializeField] AudioClip crashAudioClip;
     [SerializeField] AudioClip landAudioClip;
 
@@ -26,7 +26,7 @@ public class CollisionHandler : MonoBehaviour
         DisableOrEnableCollisions();
     }
 
-    private void OnCollisionEnter(Collision other)
+    void OnCollisionEnter(Collision other)
     {
         if (isTransitioning || collisionDisabled)
         {
@@ -68,7 +68,7 @@ public class CollisionHandler : MonoBehaviour
         Invoke("LoadNextScene", delayTime);
     }
 
-    private void LoadNextScene()
+    void LoadNextScene()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIndex = ++currentSceneIndex;
@@ -80,7 +80,7 @@ public class CollisionHandler : MonoBehaviour
         SceneManager.LoadScene(nextSceneIndex);
     }
 
-    private void ReloadScene()
+    void ReloadScene()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);

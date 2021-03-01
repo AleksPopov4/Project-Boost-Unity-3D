@@ -42,7 +42,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void StartThrusting()
+        void StartThrusting()
         {
             rb.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
             if (!audioSource.isPlaying)
@@ -56,7 +56,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void StopThrusting()
+        void StopThrusting()
         {
             mainBoosterParticle.Stop();
             audioSource.Stop();
@@ -78,7 +78,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void ApplyLeftRotation()
+        void ApplyLeftRotation()
         {
             ApplyRotation(rotationThrust);
             if (!rightBoosterParticle.isPlaying)
@@ -87,7 +87,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void ApplyRightRotation()
+        void ApplyRightRotation()
         {
             ApplyRotation(-rotationThrust);
             if (!leftBoosterParticle.isPlaying)
@@ -96,13 +96,13 @@ namespace Assets.Scripts
             }
         }
 
-        private void StopRotationParticleEffects()
+        void StopRotationParticleEffects()
         {
             leftBoosterParticle.Stop();
             rightBoosterParticle.Stop();
         }
 
-        private void ApplyRotation(float rotationThisFrame)
+        void ApplyRotation(float rotationThisFrame)
         {
             rb.freezeRotation = true; //freezing rotation so we can manually rotate
             transform.Rotate(Vector3.forward * Time.deltaTime * rotationThisFrame);
